@@ -1,59 +1,23 @@
-// pages/users/[id].tsx
-import React, { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+import React from 'react';
+import UserPage from './getUser';
 
-const getCookie = (name: string): string | null => {
-    return Cookies.get(name) || null;
-};
+const Page = async ({ params }: { params: { id: string } }) => {
+  const user = await UserPage({ params });
 
-const getBearerToken = (): string | null => {
-    const tokenCookie = getCookie('token');
-    return tokenCookie ? `Bearer ${tokenCookie}` : null;
-};
-
-const getUser = async (id: string, token: string | null): Promise<any> => {
-    try {
-        const response = await fetch(`http://localhost:5000/api/user/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': token as string,
-            },
-        });
-
-        if (response.ok) {
-            const userData = await response.json();
-            return userData;
-        } else {
-            console.error('Fetch failed');
-            return null;
-        }
-    } catch (error) {
-        console.error('Error during fetch:', error);
-        return null;
-    }
-};
-
-const UserPage = ({ params }: { params: { id: string } }) => {
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const token = getBearerToken();
-        getUser(params.id, token).then((userData) => {
-            setUser(userData);
-        });
-    }, [params.id]);
-
-    return (
+  return (
+    <div>
+      <h1>User Page</h1>
+      <br />
+      {user && (
         <>
-            <div>My GET: {params.id}</div>
-            {user && (
-                <div>
-                    User Data:
-                    <pre>{JSON.stringify(user, null, 2)}</pre>
-                </div>
-            )}
+          <p>User ID: {user._id}</p>
+          <p>User Name: {user.firstName} {user.lastName}</p>
+          <p>User Email: {user.email}</p>
+          <p>User Phone Number: {user.mobile}</p>
         </>
-    );
+      )}
+    </div>
+  );
 };
 
-export default UserPage;
+export default Page;

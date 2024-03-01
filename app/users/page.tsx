@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface User {
-    id: number;
+    _id: number;
     firstName: String;
     lastName: String;
     email: String;
@@ -10,7 +10,7 @@ interface User {
 
 
 const UsersPage = async () => {
-    const res = await fetch('http://localhost:5000/api/user/all-users', {cache: 'no-store'})
+    const res = await fetch('http://localhost:5000/api/user/all-users')
     const users: User[] = await res.json();
 
 
@@ -25,7 +25,8 @@ const UsersPage = async () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map(user => <tr key={user.id}>
+                    {users.map(user => <tr key={user._id}>
+                        <td>{user._id}</td>
                         <td>{user.firstName + ' ' + user.lastName}</td>
                         <td>{user.email}</td>
                     </tr>)}
