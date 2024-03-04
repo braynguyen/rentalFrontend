@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { cookies } from 'next/headers';
 
 const UserPage = async ({ params }: { params: { id: string } }) => {
